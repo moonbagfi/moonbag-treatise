@@ -90,7 +90,7 @@ powers the contract limits. Neither the terminal nor the API holds a key.
 | Keeper key stolen | Can open rounds, set caps, rotate the quote signer. Cannot move, freeze or redirect shares or premium, cannot stop a redeem |
 | Quote key stolen | Can sign asks inside the band. Rotated by the lister with `setQuoteSigner` |
 | Web container compromised | Holds no signing key; quotes come from the worker over the private network; containers run non-root with read-only filesystems |
-| Burn vault takeover | No owner exists. `bind` works exactly once |
+| Burn vault takeover | No owner exists. `bind` works exactly once. Only the rounds contract's current lister may burn before the three-day fallback |
 
 ---
 
@@ -115,9 +115,12 @@ print cannot be known while tickets sell. The contract accepts only a print at o
 
 ### 4.4 Burn front-running
 
-`burn()` is public and predictable. The ETH leg must come within 1.5% of the pool's own thirty-minute
-average, and each burn spends at most 2% of the pool's USDG, so a sandwich has little room. The
-$MOONBAG leg currently passes a zero minimum; a tighter bound is a known gap.
+A permissionless `burn()` with a caller-chosen minimum could be sandwiched inside one transaction: buy
+$MOONBAG, call `burn(0)` at the inflated price, sell. So `burn()` belongs to the keeper, which passes a
+minimum simulated against the latest state. The ETH leg must come within 1.5% of the pool's own
+thirty-minute average, and each burn spends at most 2% of the pool's USDG. Anyone may burn after three
+days without a keeper burn; that fallback still takes a caller-chosen minimum, so it is exposed only
+while the keeper is down.
 
 ### 4.5 Launchpad fee reroute
 
@@ -137,7 +140,7 @@ presales, allocations or whitelists.
 | Gap | Current state | Plan |
 |---|---|---|
 | Volatility input | A constant per stock (NVDA 50%, SPY 16%) | 30-day realised volatility plus a margin |
-| Burn token leg | `minTokensOut = 0` | Derive a floor from the curve or pool state |
+| Fallback burn | After three days without a keeper burn, any caller chooses `minTokensOut` | Keep the keeper up; alert on a missed daily burn |
 | External audit | Booked, not complete | Report published before any public FLOOR deposit |
 
 ---

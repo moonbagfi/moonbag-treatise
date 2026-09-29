@@ -179,8 +179,10 @@ The protocol fee is 10% of every MOON premium. The contract holds it with the ro
 settlement, then any caller may sweep it to the burn vault. If the round is void, the fee returns
 to the buyer with the rest of the ticket.
 
-The burn vault has no owner, no pause and no withdrawal. Its single public action is `burn()`:
+The burn vault has no owner, no pause and no withdrawal. Its single action is `burn()`:
 
+- called by the keeper, the rounds contract's current lister, with a minimum it simulates against the latest state;
+- open to any caller once three days pass without a burn, so fees can never be stranded;
 - available once per twenty hours, and only when at least 20 USDG waits;
 - spends at most 2% of the WETH/USDG pool's USDG in a single call;
 - requires ETH out within 1.5% of that pool's own thirty-minute average;
@@ -200,6 +202,7 @@ premium there is no burn, and no one can switch it off.
 | Name | Moonbag |
 | Ticker | $MOONBAG |
 | Chain | Robinhood Chain, chain id 4663 |
+| Contract | `0x51F67B657518A6f8951F6BD1D44604FFfc226a65` |
 | Total supply | 1,000,000,000 |
 | Team allocation | 0 |
 | Distribution | 100% to the launchpad bonding curve, graduating to a DEX pool with liquidity locked |
@@ -218,9 +221,9 @@ lines.
 | MOON CLUB | 5M (0.5%) | Early window on capped rounds, badge on every card |
 | ORBIT | 20M (2%) | Votes on tickers and lines, a name on the Orbit wall |
 
-The product ships first. Daily rounds settle on mainnet, with the treasury as the first FLOOR
-seller and each settlement published with its proof, before the curve opens. The curve opens the
-same week.
+The product shipped first. Daily and weekly rounds went live on mainnet on 29 September 2026, with
+the treasury as the first FLOOR seller, and $MOONBAG launched on the launchpad after them. The dev
+wallet then sent its entire bag, 29,411,764.71 tokens, to the dead address, leaving it with none.
 
 ---
 
@@ -259,12 +262,13 @@ fees can carry a treasury. Moonbag's will depend on Moonbag's own volume.
 | Phase | Scope |
 |---|---|
 | 1. MVP | Contracts rehearsed on a mainnet fork: vault, quotes, settlement, burn vault. Keeper, caps, web app with paper mode, documentation and a plain statement of risks. Audit booked, test suite public |
-| 2. Launch | Mainnet with SPY and NVDA, daily and weekly rounds, treasury-only FLOOR. Public settlement page from the first round. $MOONBAG fair launch the same week |
+| 2. Launch | Mainnet with SPY and NVDA, daily and weekly rounds, treasury-only FLOOR. Public settlement page from the first round. $MOONBAG fair launch. Live since 29 September 2026 |
 | 3. Growth | FLOOR deposits open to every holder, auto-roll, three-day rounds, TSLA and QQQ when caps allow. Seasons and holder tiers |
 | 4. Ecosystem | Widget and API for wallets and extensions, holder votes on tickers and lines, rounds for every liquid stock token with a feed |
 
-At the time of writing the contracts pass 21 unit tests and 5 fork tests against the real stock
-tokens, pools, feeds and launchpad. They are not yet deployed to mainnet.
+At the time of writing the contracts pass 21 unit tests and 6 fork tests against the real stock
+tokens, pools, feeds and launchpad. They were deployed to mainnet on 29 September 2026:
+MoonbagRounds `0xa329e3DF1299E75453cdA0F5b6dF953A6d4c1C07` and BurnVault `0xe3D91034688a9FBbd6789375d86F9462B2154D8A`.
 
 ---
 

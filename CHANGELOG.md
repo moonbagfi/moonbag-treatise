@@ -6,9 +6,14 @@ All notable changes to `moonbag-treatise` are recorded here. The format follows
 ## [Unreleased]
 
 ### Planned
-- Mainnet contract addresses in the whitepaper and threat model
 - Link to the external audit report
 - Volatility section updated once 30-day realised volatility replaces the constant
+
+## [0.2.0] - 2026-09-29
+
+### Changed
+- Whitepaper: mainnet addresses for MoonbagRounds and BurnVault, $MOONBAG launched, contract address in the token table, the dev bag sent to the
+  dead address, roadmap phase 2 marked live
 
 ## [0.1.0] - 2026-09-26
 
